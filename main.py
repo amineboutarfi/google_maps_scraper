@@ -64,10 +64,14 @@ def main():
         page.keyboard.press('Enter')
         page.wait_for_timeout(5000)
         
-        ######################################################
-        # need to add scrolling features here if needed      #
-        # lot of business data as explained in Youtube video #
-        ######################################################
+        #################  
+        ### scrolling ###
+        #################
+        page.hover('(//div[@role="article"])[1]')
+        # If you needed more data, change 7 by a bigger number
+        for i in range(7): 
+            page.mouse.wheel(0, 10000)
+            page.wait_for_timeout(3000)
         
         listings = page.locator('//div[@role="article"]').all()
         
