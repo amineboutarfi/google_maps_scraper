@@ -15,6 +15,8 @@ class Business:
     address: str = None
     website: str = None
     phone_number: str = None
+    reviews_count: int = None
+    reviews_average: float = None
 
 @dataclass
 class BusinessList:
@@ -64,21 +66,24 @@ def main():
         page.keyboard.press('Enter')
         page.wait_for_timeout(5000)
         
-        #################  
-        ### scrolling ###
-        #################
+        # scrolling 
         page.hover('(//div[@role="article"])[1]')
-        # If you needed more data, change 7 by a bigger number
-        for i in range(7): 
+
+        while True:
             page.mouse.wheel(0, 10000)
             page.wait_for_timeout(3000)
-        
-        listings = page.locator('//div[@role="article"]').all()
+            
+            if page.locator('//div[@role="article"]').count() >= total:
+                listings = page.locator('//div[@role="article"]').all()[:total]
+                print(f'Total Scraped: {len(listings)}')
+                break
+            else:
+                print(f'Currently Scraped: ', page.locator('//div[@role="article"]').count())
         
         business_list = BusinessList()
         
-        # getting first five only
-        for listing in listings[:5]:
+        # scraping
+        for listing in listings:
         
             listing.click()
             page.wait_for_timeout(5000)
@@ -87,13 +92,33 @@ def main():
             address_xpath = '//button[@data-item-id="address"]//div[contains(@class, "fontBodyMedium")]'
             website_xpath = '//a[@data-item-id="authority"]//div[contains(@class, "fontBodyMedium")]'
             phone_number_xpath = '//button[contains(@data-item-id, "phone:tel:")]//div[contains(@class, "fontBodyMedium")]'
+            reviews_span_xpath = '//span[@role="img"]'
             
             business = Business()
-            business.name = page.locator(name_xpath).inner_text()
-            business.address = page.locator(address_xpath).inner_text()
-            business.website = page.locator(website_xpath).inner_text()
-            business.phone_number = page.locator(phone_number_xpath).inner_text()
-                        
+            
+            if page.locator(name_xpath).count() > 0:
+                business.name = page.locator(name_xpath).inner_text()
+            else:
+                business.name = ''
+            if page.locator(address_xpath).count() > 0:
+                business.address = page.locator(address_xpath).inner_text()
+            else:
+                business.address = ''
+            if page.locator(website_xpath).count() > 0:
+                business.website = page.locator(website_xpath).inner_text()
+            else:
+                business.website = ''
+            if page.locator(phone_number_xpath).count() > 0:
+                business.phone_number = page.locator(phone_number_xpath).inner_text()
+            else:
+                business.phone_number = ''
+            if listing.locator(reviews_span_xpath).count() > 0:
+                business.reviews_average = float(listing.locator(reviews_span_xpath).get_attribute('aria-label').split()[0].replace(',','.').strip())
+                business.reviews_count = int(listing.locator(reviews_span_xpath).get_attribute('aria-label').split()[2].strip())
+            else:
+                business.reviews_average = ''
+                business.reviews_count = ''
+                
             business_list.business_list.append(business)
         
         # saving to both excel and csv just to showcase the features.
@@ -107,14 +132,20 @@ if __name__ == "__main__":
     
     parser = argparse.ArgumentParser()
     parser.add_argument("-s", "--search", type=str)
-    parser.add_argument("-l", "--location", type=str)
+    parser.add_argument("-t", "--total", type=int)
     args = parser.parse_args()
     
-    if args.location and args.search:
-        search_for = f'{args.search}  {args.location}'
+    if args.search:
+        search_for = args.search
     else:
-        # in case no arguments passed:
-        # scraper will search for this on Google Maps
+        # in case no arguments passed
+        # the scraper will search by defaukt for:
         search_for = 'dentist new york'
+    
+    # total number of products to scrape. Default is 10
+    if args.total:
+        total = args.total
+    else:
+        total = 10
         
     main()

@@ -15,5 +15,5 @@ check both Excel & CSV files (google_maps_data) to see how final data will look 
 - `playwright install chromium`
 
 ## to Run:
-- `python3 main.py -l=<location> -s=<profession>`
+- `python3 main.py -s=<what & where to search for> -t=<how many>`
 

@@ -1,6 +1,7 @@
-name,address,website,phone_number
-The Welbeck Clinic,"20 Welbeck St, London W1G 8ED, Royaume-Uni",thewelbeckclinic.co.uk,+44 20 7486 8100
-French Dentist London,"71 Queen's Gate, South Kensington, London SW7 5JT, Royaume-Uni",drsadone.com,+44 20 7373 6899
-London Dental Centre,"109 Lever St, London EC1V 3RQ, Royaume-Uni",thelondondentalcentre.co.uk,+44 20 7608 0806
-Dental Smiles London Chalton Street,"30-32 Chalton St, London NW1 1JB, Royaume-Uni",dentalsmileslondon.co.uk,+44 20 3757 5272
-Pall Mall Dental London,"15 Pall Mall, St. James's, London SW1Y 5LU, Royaume-Uni",pallmalldental.co.uk,+44 20 7766 7150
+name,address,website,phone_number,reviews_count,reviews_average
+Dr Pascal MARIN,"5 Rue Crétet, 75009 Paris, France",doctolib.fr,+33 6 75 15 49 16,5,3.4
+Dr. Charlotte Parment,"cabinet médical ipso Saint Martin, 323 Rue Saint-Martin, 75003 Paris, France",ipso.paris,,4,5.0
+Dr Claire Paris,"86 Rue de l'Université, 75007 Paris, France",,+33 1 40 62 95 28,6,5.0
+Dr Nancy Salzman,"1 Av. de Lowendal, 75007 Paris, France",doctor-salzman.com,+33 1 45 63 18 43,35,4.8
+Docteur Franck Besse,"45 Rue de Lancry, 75010 Paris, France",doctolib.fr,+33 1 44 85 26 83,24,4.2
+Docteur Simon OHAYON- English speaking doctor- International medical center,"48 BIS Rue des Belles Feuilles, 75116 Paris, France",doctolib.fr,+33 6 58 80 18 38,94,4.1
