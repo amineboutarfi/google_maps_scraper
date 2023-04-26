@@ -69,6 +69,9 @@ def main():
         # scrolling 
         page.hover('(//div[@role="article"])[1]')
 
+        # this variable is used to detect if the bot
+        # scraped the same number of listings in the previous iteration
+        previously_counted = 0
         while True:
             page.mouse.wheel(0, 10000)
             page.wait_for_timeout(3000)
@@ -78,7 +81,15 @@ def main():
                 print(f'Total Scraped: {len(listings)}')
                 break
             else:
-                print(f'Currently Scraped: ', page.locator('//div[@role="article"]').count())
+                # logic to break from loop to not run infinitely 
+                # in case arrived at all available listings
+                if page.locator('//div[@role="article"]').count() == previously_counted:
+                    listings = page.locator('//div[@role="article"]').all()
+                    print(f'Arrived at all available\nTotal Scraped: {len(listings)}')
+                    break
+                else:
+                    previously_counted = page.locator('//div[@role="article"]').count()
+                    print(f'Currently Scraped: ', page.locator('//div[@role="article"]').count())
         
         business_list = BusinessList()
         
