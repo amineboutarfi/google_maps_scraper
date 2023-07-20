@@ -76,20 +76,20 @@ def main():
             page.mouse.wheel(0, 10000)
             page.wait_for_timeout(3000)
             
-            if page.locator('//div[@role="article"]').count() >= total:
-                listings = page.locator('//div[@role="article"]').all()[:total]
+            if page.locator('//a[contains(@href, "https://www.google.com/maps/place")]').count() >= total:
+                listings = page.locator('//a[contains(@href, "https://www.google.com/maps/place")]').all()[:total]
                 print(f'Total Scraped: {len(listings)}')
                 break
             else:
                 # logic to break from loop to not run infinitely 
                 # in case arrived at all available listings
-                if page.locator('//div[@role="article"]').count() == previously_counted:
-                    listings = page.locator('//div[@role="article"]').all()
+                if page.locator('//a[contains(@href, "https://www.google.com/maps/place")]').count() == previously_counted:
+                    listings = page.locator('//a[contains(@href, "https://www.google.com/maps/place")]').all()
                     print(f'Arrived at all available\nTotal Scraped: {len(listings)}')
                     break
                 else:
-                    previously_counted = page.locator('//div[@role="article"]').count()
-                    print(f'Currently Scraped: ', page.locator('//div[@role="article"]').count())
+                    previously_counted = page.locator('//a[contains(@href, "https://www.google.com/maps/place")]').count()
+                    print(f'Currently Scraped: ', page.locator('//a[contains(@href, "https://www.google.com/maps/place")]').count())
         
         business_list = BusinessList()
         
