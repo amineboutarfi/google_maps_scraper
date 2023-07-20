@@ -99,7 +99,7 @@ def main():
             listing.click()
             page.wait_for_timeout(5000)
             
-            name_xpath = '//h1[contains(@class, "fontHeadlineLarge")]'
+            name_xpath = 'h1'
             address_xpath = '//button[@data-item-id="address"]//div[contains(@class, "fontBodyMedium")]'
             website_xpath = '//a[@data-item-id="authority"]//div[contains(@class, "fontBodyMedium")]'
             phone_number_xpath = '//button[contains(@data-item-id, "phone:tel:")]//div[contains(@class, "fontBodyMedium")]'
@@ -108,7 +108,7 @@ def main():
             business = Business()
             
             if page.locator(name_xpath).count() > 0:
-                business.name = page.locator(name_xpath).inner_text()
+                business.name = page.locator(name_xpath).nth(0).inner_text()
             else:
                 business.name = ''
             if page.locator(address_xpath).count() > 0:
