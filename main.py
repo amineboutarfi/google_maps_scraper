@@ -119,53 +119,56 @@ def main():
 
         # scraping
         for listing in listings:
-            listing.click()
-            page.wait_for_timeout(5000)
+            try:
+                listing.click()
+                page.wait_for_timeout(5000)
 
-            name_xpath = '//div[contains(@class, "fontHeadlineSmall")]'
-            address_xpath = '//button[@data-item-id="address"]//div[contains(@class, "fontBodyMedium")]'
-            website_xpath = '//a[@data-item-id="authority"]//div[contains(@class, "fontBodyMedium")]'
-            phone_number_xpath = '//button[contains(@data-item-id, "phone:tel:")]//div[contains(@class, "fontBodyMedium")]'
-            reviews_span_xpath = '//span[@role="img"]'
+                name_xpath = '//div[contains(@class, "fontHeadlineSmall")]'
+                address_xpath = '//button[@data-item-id="address"]//div[contains(@class, "fontBodyMedium")]'
+                website_xpath = '//a[@data-item-id="authority"]//div[contains(@class, "fontBodyMedium")]'
+                phone_number_xpath = '//button[contains(@data-item-id, "phone:tel:")]//div[contains(@class, "fontBodyMedium")]'
+                reviews_span_xpath = '//span[@role="img"]'
 
-            business = Business()
+                business = Business()
 
-            if listing.locator(name_xpath).count() > 0:
-                business.name = listing.locator(name_xpath).inner_text()
-            else:
-                business.name = ""
-            if page.locator(address_xpath).count() > 0:
-                business.address = page.locator(address_xpath).inner_text()
-            else:
-                business.address = ""
-            if page.locator(website_xpath).count() > 0:
-                business.website = page.locator(website_xpath).inner_text()
-            else:
-                business.website = ""
-            if page.locator(phone_number_xpath).count() > 0:
-                business.phone_number = page.locator(phone_number_xpath).inner_text()
-            else:
-                business.phone_number = ""
-            if listing.locator(reviews_span_xpath).count() > 0:
-                business.reviews_average = float(
-                    listing.locator(reviews_span_xpath)
-                    .get_attribute("aria-label")
-                    .split()[0]
-                    .replace(",", ".")
-                    .strip()
-                )
-                business.reviews_count = int(
-                    listing.locator(reviews_span_xpath)
-                    .get_attribute("aria-label")
-                    .split()[2]
-                    .strip()
-                )
-            else:
-                business.reviews_average = ""
-                business.reviews_count = ""
+                if listing.locator(name_xpath).count() > 0:
+                    business.name = listing.locator(name_xpath).all()[0].inner_text()
+                else:
+                    business.name = ""
+                if page.locator(address_xpath).count() > 0:
+                    business.address = page.locator(address_xpath).all()[0].inner_text()
+                else:
+                    business.address = ""
+                if page.locator(website_xpath).count() > 0:
+                    business.website = page.locator(website_xpath).all()[0].inner_text()
+                else:
+                    business.website = ""
+                if page.locator(phone_number_xpath).count() > 0:
+                    business.phone_number = page.locator(phone_number_xpath).all()[0].inner_text()
+                else:
+                    business.phone_number = ""
+                if listing.locator(reviews_span_xpath).count() > 0:
+                    business.reviews_average = float(
+                        listing.locator(reviews_span_xpath).all()[0]
+                        .get_attribute("aria-label")
+                        .split()[0]
+                        .replace(",", ".")
+                        .strip()
+                    )
+                    business.reviews_count = int(
+                        listing.locator(reviews_span_xpath).all()[0]
+                        .get_attribute("aria-label")
+                        .split()[2]
+                        .replace(',','')
+                        .strip()
+                    )
+                else:
+                    business.reviews_average = ""
+                    business.reviews_count = ""
 
-            business_list.business_list.append(business)
-
+                business_list.business_list.append(business)
+            except Exception as e:
+                print(e)
         # saving to both excel and csv just to showcase the features.
         business_list.save_to_excel("google_maps_data")
         business_list.save_to_csv("google_maps_data")
