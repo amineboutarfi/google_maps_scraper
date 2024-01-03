@@ -6,7 +6,6 @@ from dataclasses import dataclass, asdict, field
 import pandas as pd
 import argparse
 
-
 @dataclass
 class Business:
     """holds business data"""
@@ -17,6 +16,8 @@ class Business:
     phone_number: str = None
     reviews_count: int = None
     reviews_average: float = None
+    latitude: float = None
+    longitude: float = None
 
 
 @dataclass
@@ -52,6 +53,12 @@ class BusinessList:
         """
         self.dataframe().to_csv(f"{filename}.csv", index=False)
 
+def extract_coordinates_from_url(url: str) -> tuple[float,float]:
+    """helper function to extract coordinates from url"""
+    
+    coordinates = url.split('/@')[-1].split('/')[0]
+    # return latitude, longitude
+    return float(coordinates.split(',')[0]), float(coordinates.split(',')[1])
 
 def main():
     with sync_playwright() as p:
@@ -165,6 +172,8 @@ def main():
                 else:
                     business.reviews_average = ""
                     business.reviews_count = ""
+                
+                business.latitude, business.longitude = extract_coordinates_from_url(page.url)
 
                 business_list.business_list.append(business)
             except Exception as e:
