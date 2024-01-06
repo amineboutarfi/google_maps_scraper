@@ -162,7 +162,7 @@ def main():
                         .replace(",", ".")
                         .strip()
                     )
-                    business.reviews_count = int(
+                    business.reviews_count = (
                         listing.locator(reviews_span_xpath).all()[0]
                         .get_attribute("aria-label")
                         .split()[2]
