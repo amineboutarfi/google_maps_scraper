@@ -160,6 +160,7 @@ def main():
                         listings = page.locator(
                             '//a[contains(@href, "https://www.google.com/maps/place")]'
                         ).all()
+                        listings = [listing.locator("xpath=..") for listing in listings]
                         print(f"Arrived at all available\nTotal Scraped: {len(listings)}")
                         break
                     else:
