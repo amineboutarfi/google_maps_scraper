@@ -181,16 +181,19 @@ def main():
                     listing.click()
                     page.wait_for_timeout(5000)
 
-                    name_xpath = '//div[contains(@class, "fontHeadlineSmall")]'
+                    name_attibute = 'aria-label'
                     address_xpath = '//button[@data-item-id="address"]//div[contains(@class, "fontBodyMedium")]'
                     website_xpath = '//a[@data-item-id="authority"]//div[contains(@class, "fontBodyMedium")]'
                     phone_number_xpath = '//button[contains(@data-item-id, "phone:tel:")]//div[contains(@class, "fontBodyMedium")]'
-                    reviews_span_xpath = '//span[@role="img"]'
-
+                    review_count_xpath = '//button[@jsaction="pane.reviewChart.moreReviews"]//span'
+                    reviews_average_xpath = '//div[@jsaction="pane.reviewChart.moreReviews"]//div[@role="img"]'
+                    
+                    
                     business = Business()
-
-                    if listing.locator(name_xpath).count() > 0:
-                        business.name = listing.locator(name_xpath).all()[0].inner_text()
+                   
+                    if len(listing.get_attribute(name_attibute)) >= 1:
+        
+                        business.name = listing.get_attribute(name_attibute)
                     else:
                         business.name = ""
                     if page.locator(address_xpath).count() > 0:
@@ -205,24 +208,25 @@ def main():
                         business.phone_number = page.locator(phone_number_xpath).all()[0].inner_text()
                     else:
                         business.phone_number = ""
-                    if listing.locator(reviews_span_xpath).count() > 0:
-                        business.reviews_average = float(
-                            listing.locator(reviews_span_xpath).all()[0]
-                            .get_attribute("aria-label")
-                            .split()[0]
-                            .replace(",", ".")
-                            .strip()
-                        )
+                    if page.locator(review_count_xpath).count() > 0:
                         business.reviews_count = int(
-                            listing.locator(reviews_span_xpath).all()[0]
-                            .get_attribute("aria-label")
-                            .split()[2]
+                            page.locator(review_count_xpath).inner_text()
+                            .split()[0]
                             .replace(',','')
                             .strip()
                         )
                     else:
-                        business.reviews_average = ""
                         business.reviews_count = ""
+                        
+                    if page.locator(reviews_average_xpath).count() > 0:
+                        business.reviews_average = float(
+                            page.locator(reviews_average_xpath).get_attribute(name_attibute)
+                            .split()[0]
+                            .replace(',','.')
+                            .strip())
+                    else:
+                        business.reviews_average = ""
+                    
                     
                     business.latitude, business.longitude = extract_coordinates_from_url(page.url)
 
